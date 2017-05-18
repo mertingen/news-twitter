@@ -40,7 +40,10 @@ class UserController extends Controller
         $user = $this->get('security.user_provider')->loadUserByUsername($twitterUser->screen_name);
 
         if (empty($user)){
+            $accessTokenData = $this->getSessionService()->get('accessToken');
             $user = new User();
+            $user->setAccessToken($accessTokenData['oauth_token']);
+            $user->setSecretAccessToken($accessTokenData['oauth_token_secret']);
             $user->setTwitterId($twitterUser->id);
             $user->setName($twitterUser->name);
             $user->setUsername($twitterUser->screen_name);
@@ -50,13 +53,15 @@ class UserController extends Controller
             $this->getEntityManager()->flush($user);
         }
 
+        $user->setImage($twitterUser->profile_image_url);
+
 
         $this->get('security.token_storage')->setToken(
             new UsernamePasswordToken(
                 $user, null, 'main', $user->getRoles())
         );
 
-        $this->redirectToRoute('twitter-login');
+        return $this->redirectToRoute('keyword-list');
 
 
     }

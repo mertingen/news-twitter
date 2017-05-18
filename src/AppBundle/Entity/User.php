@@ -50,11 +50,33 @@ class User implements \JsonSerializable, UserInterface
     private $url;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="access_token", type="string", length=255)
+     */
+    private $accessToken;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="secret_access_token", type="string", length=255)
+     */
+    private $secretAccessToken;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @var
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Keyword", mappedBy="user")
+     */
+    private $keywords;
+
+    private $image;
 
 
 
@@ -80,6 +102,31 @@ class User implements \JsonSerializable, UserInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set name
+     *
+     * @param $image
+     * @return User
+     * @internal param string $name
+     *
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**
@@ -196,7 +243,8 @@ class User implements \JsonSerializable, UserInterface
             'name' => $this->getName(),
             'username' => $this->getUsername(),
             'url' => $this->getUrl(),
-            'createdAt' => $this->getCreatedAt()
+            'createdAt' => $this->getCreatedAt(),
+            'keywords' => $this->getKeywords()
         );
     }
 
@@ -256,5 +304,94 @@ class User implements \JsonSerializable, UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->keywords = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add keyword
+     *
+     * @param \AppBundle\Entity\Keyword $keyword
+     *
+     * @return User
+     */
+    public function addKeyword(\AppBundle\Entity\Keyword $keyword)
+    {
+        $this->keywords[] = $keyword;
+
+        return $this;
+    }
+
+    /**
+     * Remove keyword
+     *
+     * @param \AppBundle\Entity\Keyword $keyword
+     */
+    public function removeKeyword(\AppBundle\Entity\Keyword $keyword)
+    {
+        $this->keywords->removeElement($keyword);
+    }
+
+    /**
+     * Get keywords
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * Set accessToken
+     *
+     * @param string $accessToken
+     *
+     * @return User
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get accessToken
+     *
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * Set secretAccessToken
+     *
+     * @param string $secretAccessToken
+     *
+     * @return User
+     */
+    public function setSecretAccessToken($secretAccessToken)
+    {
+        $this->secretAccessToken = $secretAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get secretAccessToken
+     *
+     * @return string
+     */
+    public function getSecretAccessToken()
+    {
+        return $this->secretAccessToken;
     }
 }

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href="{{ asset('assets/css/select.min.css') }}" rel="stylesheet" type="text/css"/>
+    <!-- END PAGE LEVEL PLUGINS -->
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <!-- TWITTER INFORMATION -->
+        {% for keyword in keywords | keys %}
+            <div class="col-sm-6">
+        <span class="first">
+                                {{ keyword | capitalize }}
+            <span class="icon-edit new"></span>
+                    </span>
+                <ul class="timeline">
+                    {% for tweet in keywords[keyword] %}
+                        <li>
+                            <div class="avatar">
+                                <img src="{{ tweet.user.profile_image_url }}">
+                                <div class="hover">
+                                    <div class="icon-twitter"></div>
+                                </div>
+                            </div>
+                            <div class="bubble-container">
+                                <div class="bubble">
+                                    <h3>{{ '@'~tweet.user.screen_name }}</h3><br/>
+                                    {{ tweet.text }}
+                                    <div class="over-bubble">
+                                        <div class="icon-mail-reply action"></div>
+                                        <div class="icon-retweet action"></div>
+                                        <div class="icon-star"></div>
+                                    </div>
+                                </div>
+
+                                <div class="arrow"></div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        {% endfor %}
+
+    </div>
+
+
+
+{% endblock %}
+
+
+{% block extraJS %}
+
+{% endblock %}
