@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>
+        News Twitter
+    </title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="News Twitter" name="description"/>
+    <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/bootstrap-theme.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+
+<body>
+<div class="container" id="container-body">
+    <div class="row">
+        <form class="form-signin mg-btm">
+            <h3 class="heading-desc">
+                Login to News Twitter</h3>
+            <div class="social-box">
+                <div class="row mg-btm">
+                    <div class="col-md-12">
+                        <a href="#" class="btn btn-primary btn-block">
+                            <i class="icon-facebook"></i>    Login with Facebook
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="{{ authUrl }}" class="btn btn-info btn-block" >
+                            <i class="fa fa-twitter"></i>    Login with Twitter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
+
+</body>
+
+
+</html>
