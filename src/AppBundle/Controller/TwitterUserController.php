@@ -24,13 +24,18 @@ class TwitterUserController extends Controller
         return $this->get('session.service');
     }
 
+    public function getKeywordService()
+    {
+        return $this->get('keyword.service');
+    }
+
     public function getTwitterParameters()
     {
         return array(
             'callbackUrl' => $this->getParameter('callback_url'),
             'consumerKey' => $this->getParameter('consumer_key'),
             'consumerSecretKey' => $this->getParameter('consumer_secret_key')
-            );
+        );
     }
 
     /**
@@ -38,6 +43,10 @@ class TwitterUserController extends Controller
      */
     public function loginAction()
     {
+        if ($this->getUser() !== NULL) {
+            return $this->redirectToRoute('keyword-list');
+        }
+
         $twitterParameters = $this->getTwitterParameters();
         $connection = new TwitterOAuth($twitterParameters['consumerKey'], $twitterParameters['consumerSecretKey']);
         $requestToken = $connection->oauth('oauth/request_token', array('oauth_callback' => $twitterParameters['callbackUrl']));
@@ -65,7 +74,7 @@ class TwitterUserController extends Controller
         $consumerKey = $this->getParameter('consumer_key');
         $consumerKeySecret = $this->getParameter('consumer_secret_key');
 
-        try{
+        try {
             $authConnection = new TwitterOAuth($consumerKey, $consumerKeySecret, $oauthToken, $oauthTokenSecret);
 
             $accessData = $authConnection->oauth("oauth/access_token", ["oauth_verifier" => $oauthVerifier]);
@@ -75,8 +84,9 @@ class TwitterUserController extends Controller
 
 
             $twitterUser = $connection->get("account/verify_credentials");
-        } catch (TwitterOAuthException $e){
-            dump($e->getMessage()); die;
+        } catch (TwitterOAuthException $e) {
+            dump($e->getMessage());
+            die;
         }
 
         $this->getSessionService()->set('twitterUser', $twitterUser);

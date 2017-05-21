@@ -20,5 +20,11 @@ parameters:
     consumer_secret_key: v3UIX6bBHXc8siHMtzW22bbCesO7LlfAAwGOLxVYUG0PrCLW0J
     api_host: http://localhost:3000/v1
 
+    #Redis parameters
+    cache_provider:         array_cache
+    redis_cache_host:       localhost
+    redis_cache_port:       6379
+    redis_cache_keyspace:   tweet
+
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

@@ -3,6 +3,7 @@
 {% block head %}
     <!-- BEGIN PAGE LEVEL PLUGINS -->
     <link href="{{ asset('assets/css/select.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css"/>
     <!-- END PAGE LEVEL PLUGINS -->
 {% endblock %}
 
@@ -27,7 +28,7 @@
                             <div class="bubble-container">
                                 <div class="bubble">
                                     <h3>{{ '@'~tweet.user.screen_name }}</h3><br/>
-                                    {{ tweet.text }}
+                                    {{ tweet.text }} <span id="tweet-date">{{ tweet.created_at | date ('Y-m-d H:i:s') }}</span>
                                     <div class="over-bubble">
                                         <div class="icon-mail-reply action"></div>
                                         <div class="icon-retweet action"></div>

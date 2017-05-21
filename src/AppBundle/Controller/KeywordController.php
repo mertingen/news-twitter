@@ -47,26 +47,32 @@ class KeywordController extends Controller
     public function listAction()
     {
         $userKeywords = $this->getKeywordService()->getAll(array('user' => $this->getUser()));
-        if (!empty($userKeywords)){
-            $data = [];
-            $host = $this->getParameter('api_host') . '/tweets';
+        if (!empty($userKeywords)) {
             $user = $this->getUser();
 
-            $tweetWhereData = array(
+            $tweetWhere = array(
                 'accessToken' => $user->getAccessToken(),
                 'secretAccessToken' => $user->getSecretAccessToken()
             );
-            foreach ($userKeywords as $userKeyword){
-                $tweetWhereData['keyword'] = $userKeyword->getName();
-                $tweetWhereData['language'] = $userKeyword->getLanguage();
-                $tweetWhereData['count'] = $userKeyword->getCount();
-                $tweets = $this->getHttpService()->generatePostData($host, $tweetWhereData);
-                if ($tweets['status']){
-                    $data[$userKeyword->getName()] = $tweets['tweets'];
+
+            $keywordNames = [];
+            foreach ($userKeywords as $userKeyword) {
+                $keywordNames[] = $userKeyword->getName();
+                $tweetWhere['data'][] = array(
+                    'keyword' => $userKeyword->getName(),
+                    'language' => $userKeyword->getLanguage(),
+                    'count' => $userKeyword->getCount()
+                );
+            }
+
+            $host = $this->getParameter('api_host') . '/tweets';
+            $tweetsData = $this->getHttpService()->generatePostData($host, $tweetWhere);
+            if ($tweetsData['status']) {
+                $data = [];
+                foreach ($tweetsData['tweets'] as $keywordKey => $tweetData) {
+                    $data[$keywordNames[$keywordKey]] = $tweetData;
                 }
             }
-        }else{
-            $data = array();
         }
 
         return $this->render('AppBundle:keyword:list.html.twig', array('keywords' => $data));
@@ -93,6 +99,11 @@ class KeywordController extends Controller
 
         if (empty($name) || empty($language) || empty($count)) {
             die('boş yerleri doldur.');
+        }
+
+        $validKeyword = $this->getKeywordService()->getAll(array('name' => $name, 'user' => $this->getUser()));
+        if ($validKeyword) {
+            die('aynı kelime girilemez');
         }
 
         $keyword = new Keyword();
@@ -143,6 +154,16 @@ class KeywordController extends Controller
 
         if (empty($name) || empty($language) || empty($count)) {
             die('boş yerleri doldur.');
+        }
+
+        $validWhere = array(
+            'keywordId' => $keyword->getKeywordId(),
+            'name' => $name,
+            'user' => $this->getUser()
+        );
+        $validKeyword = $this->getKeywordService()->getExcluded($validWhere);
+        if ($validKeyword) {
+            die('aynı kelime girilemez');
         }
 
         $keyword->setName($name);

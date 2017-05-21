@@ -16,6 +16,16 @@ body {
 
 }
 
+#tweet-date {
+    font-size: 75%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    text-align:right;
+    margin-right:5px;
+}
+
 .bubble {
     width: 100%;
     padding: .5em 1em;
@@ -70,7 +80,7 @@ body {
     border-bottom-right-radius: 8px;
     margin-bottom: 2em; }
 .timeline li {
-    margin-left: -38px;
+    margin-left: -39px;
     padding: 1em 0; }
 .timeline li:nth-child(even) {
     background-color: #578BA9; }

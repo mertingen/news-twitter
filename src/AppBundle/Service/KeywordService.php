@@ -53,6 +53,18 @@ class KeywordService
 
     /**
      * @param array $where
+     * @return mixed
+     * @internal param array $names
+     * @internal param array $keywordIds
+     */
+    public function getExcluded($where = array())
+    {
+        $keywordRepo = $this->entityManager->getRepository('AppBundle:Keyword');
+        return $keywordRepo->getExcludedKeywords($where);
+    }
+
+    /**
+     * @param array $where
      * @return array
      */
     public function getAll($where = array())
