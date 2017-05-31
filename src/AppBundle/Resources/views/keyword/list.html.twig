@@ -1,57 +1,87 @@
 {% extends 'base.html.twig' %}
 
-{% block head %}
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <link href="{{ asset('assets/css/select.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css"/>
-    <!-- END PAGE LEVEL PLUGINS -->
+{% block stylesheets %}
+    <link href="{{ asset("assets/css/custom.css") }}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-    <div class="row">
-        <!-- TWITTER INFORMATION -->
-        {% for keyword in keywords | keys %}
-            <div class="col-sm-6">
-        <span class="first">
-                                {{ keyword | capitalize }}
-            <span class="icon-edit new"></span>
-                    </span>
-                <ul class="timeline">
-                    {% for tweet in keywords[keyword] %}
-                        <li>
-                            <div class="avatar">
-                                <img src="{{ tweet.user.profile_image_url }}">
-                                <div class="hover">
-                                    <div class="icon-twitter"></div>
-                                </div>
-                            </div>
-                            <div class="bubble-container">
-                                <div class="bubble">
-                                    <h3>{{ '@'~tweet.user.screen_name }}</h3><br/>
-                                    {{ tweet.text }} <span id="tweet-date">{{ tweet.created_at | date ('Y-m-d H:i:s') }}</span>
-                                    <div class="over-bubble">
-                                        <div class="icon-mail-reply action"></div>
-                                        <div class="icon-retweet action"></div>
-                                        <div class="icon-star"></div>
-                                    </div>
-                                </div>
 
-                                <div class="arrow"></div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2></h2>
+        </div>
 
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Tweet Keywords
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            {% for userKeyword in userKeywords %}
+                                <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <button class="btn btn-primary btn-lg btn-block waves-effect keywords"
+                                            type="button"
+                                            data-keywordId="{{ userKeyword.keywordId }}">{{ userKeyword.name | capitalize }} {{ " (" ~ userKeyword.language | capitalize ~ ")" }}</button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endfor %}
+        </div>
+        <div class="row" id="tweets">
+
+            {% for tweet in tweetsData %}
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="card">
+                        <div class="body bg-cyan">
+                            {{ tweet.text }}
+                            <img class="tweet-profile-img" src="{{ tweet.user.profile_image_url }}">
+                            <span class="tweet-created-at">{{ tweet.created_at | date('Y-m-d H:i:s') }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
 
     </div>
-
-
 
 {% endblock %}
 
 
-{% block extraJS %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.keywords').click(function (event) {
+                event.preventDefault();
+                var keywordId = $(this).data('keywordid');
+                $.ajax({
+                    "url": "{{ path("keyword-get") }}",
+                    "type": "POST",
+                    "data": {"keywordId": keywordId},
+                    "success": function (data) {
+                        $('#tweets').empty();
+                        $.each(data, function (index, tweet) {
+                            var date = new Date(tweet.created_at);
+
+                            var yr = date.getFullYear(),
+                                month = date.getMonth() < 10 ? '0' + (parseInt(date.getMonth())+1) : (parseInt(date.getMonth())+1),
+                                day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate(),
+                                hour = date.getHours(),
+                                minute = date.getMinutes(),
+                                second = date.getSeconds(),
+                                newDate = yr + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second;
+                            $('#tweets').append('<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="card"><div class="body bg-cyan">' + tweet.text + '<img class="tweet-profile-img" src="' + tweet.user.profile_image_url + '"><span class="tweet-created-at">' + newDate + '</span></div></div></div>')
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
 {% endblock %}

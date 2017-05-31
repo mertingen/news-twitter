@@ -13,7 +13,7 @@ class KeywordRepository extends \Doctrine\ORM\EntityRepository
     public function getExcludedKeywords($where = array())
     {
         $query = $this->createQueryBuilder('k')
-            ->where('k.keywordId = :keywordId')
+            ->where('k.keywordId != :keywordId')
             ->andWhere('k.name = :name')
             ->andWhere('k.user = :user')
             ->setParameter('name', $where['name'])

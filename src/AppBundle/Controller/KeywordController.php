@@ -10,8 +10,10 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Keyword;
+use B\Json;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,6 +42,11 @@ class KeywordController extends Controller
         return $this->get('user.service');
     }
 
+    public function getSessionService()
+    {
+        return $this->get('session.service');
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/list", methods={"GET"}, name="keyword-list")
@@ -48,34 +55,66 @@ class KeywordController extends Controller
     {
         $userKeywords = $this->getKeywordService()->getAll(array('user' => $this->getUser()));
         if (!empty($userKeywords)) {
-            $user = $this->getUser();
 
-            $tweetWhere = array(
-                'accessToken' => $user->getAccessToken(),
-                'secretAccessToken' => $user->getSecretAccessToken()
+            $userKeyword = $userKeywords[0];
+            $twitterConnection = $this->getSessionService()->get('twitterConnection');
+            $tweetsData = $twitterConnection->get(
+                'search/tweets',
+                array(
+                    'q' => $userKeyword->getName(),
+                    'lang' => $userKeyword->getLanguage(),
+                    'count' => $userKeyword->getCount(),
+                    'result_type' => 'recent'
+                )
             );
 
-            $keywordNames = [];
-            foreach ($userKeywords as $userKeyword) {
-                $keywordNames[] = $userKeyword->getName();
-                $tweetWhere['data'][] = array(
-                    'keyword' => $userKeyword->getName(),
-                    'language' => $userKeyword->getLanguage(),
-                    'count' => $userKeyword->getCount()
-                );
+            if ($tweetsData->statuses) {
+                $data = $tweetsData->statuses;
+            } else {
+                $data = array();
             }
 
-            $host = $this->getParameter('api_host') . '/tweets';
-            $tweetsData = $this->getHttpService()->generatePostData($host, $tweetWhere);
-            if ($tweetsData['status']) {
-                $data = [];
-                foreach ($tweetsData['tweets'] as $keywordKey => $tweetData) {
-                    $data[$keywordNames[$keywordKey]] = $tweetData;
-                }
-            }
         }
 
-        return $this->render('AppBundle:keyword:list.html.twig', array('keywords' => $data));
+        return $this->render('AppBundle:keyword:list.html.twig',
+            array(
+                'userKeywords' => $userKeywords,
+                'tweetsData' => $data
+            )
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/get", methods={"POST"}, name="keyword-get")
+     */
+    public function getDataAction(Request $request)
+    {
+        $keywordId = $request->request->get('keywordId');
+        if (empty($keywordId)) {
+            return new JsonResponse(array(false), 404);
+        }
+
+        $keyword = $this->getKeywordService()->get($keywordId);
+        $twitterConnection = $this->getSessionService()->get('twitterConnection');
+        $tweetsData = $twitterConnection->get(
+            'search/tweets',
+            array(
+                'q' => $keyword->getName(),
+                'lang' => $keyword->getLanguage(),
+                'count' => $keyword->getCount(),
+                'result_type' => 'recent'
+            )
+        );
+
+        if ($tweetsData->statuses) {
+            $data = $tweetsData->statuses;
+        } else {
+            $data = array();
+        }
+
+        return new JsonResponse($data, 200);
     }
 
     /**
@@ -88,7 +127,8 @@ class KeywordController extends Controller
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @return Response
      * @Route("/postAdd", methods={"POST"}, name="keyword-post-add")
      */
     public function postAddAction(Request $request)
@@ -103,7 +143,7 @@ class KeywordController extends Controller
 
         $validKeyword = $this->getKeywordService()->getAll(array('name' => $name, 'user' => $this->getUser()));
         if ($validKeyword) {
-            die('aynı kelime girilemez');
+            die('aynı kelime girilemez, şimdilik...');
         }
 
         $keyword = new Keyword();
@@ -124,7 +164,8 @@ class KeywordController extends Controller
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Keyword $keyword
+     * @return Response
      * @Route("/edit/{keywordId}", methods={"GET"}, name="keyword-edit")
      */
     public function editAction(Keyword $keyword)
@@ -163,7 +204,7 @@ class KeywordController extends Controller
         );
         $validKeyword = $this->getKeywordService()->getExcluded($validWhere);
         if ($validKeyword) {
-            die('aynı kelime girilemez');
+            die('aynı kelime girilemez, şimdilik...');
         }
 
         $keyword->setName($name);
@@ -195,7 +236,8 @@ class KeywordController extends Controller
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Keyword $keyword
+     * @return Response
      * @Route("/delete/{keywordId}", methods={"GET"}, name="keyword-delete")
      */
     public function deleteAction(Keyword $keyword)

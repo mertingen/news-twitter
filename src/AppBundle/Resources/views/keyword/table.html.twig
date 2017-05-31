@@ -1,52 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block head %}
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <link href="{{ asset('assets/css/select.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('assets/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
-    <!-- END PAGE LEVEL PLUGINS -->
-{% endblock %}
-
 {% block body %}
-    <div class="row">
-        <div class="alert alert-success" id="success-msg">
-            <strong>Well done!</strong> You successfully read this important alert message.
-        </div>
-        <div class="alert alert-info" id="error-msg">
-            <strong>Heads up!</strong> This alert needs your attention, but it's not super important.
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Language</th>
-                    <th>Count</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for keyword in keywords %}
-                    <tr class="list-item-block">
-                        <td>{{ keyword.name }}</td>
-                        <td>{{ keyword.language }}</td>
-                        <td>{{ keyword.count }}</td>
-                        <td>
-                            <a data-toggle="confirmation"
-                               href="{{ path('keyword-edit', {keywordId: keyword.keywordId}) }}"
-                               class="btn fancybox default edit btn-xs green"
-                               title="Edit"><i
-                                        class="fa fa-pencil"></i></a>
-                            <a data-toggle="confirmation"
-                               href="{{ path('keyword-delete', {keywordId: keyword.keywordId}) }}"
-                               class="btn fancybox default delete btn-xs green"
-                               title="Delete"><i
-                                        class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        Keyword Table
+                    </h2>
+                </div>
+                <div class="body table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Language</th>
+                            <th>Count</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set counter = 1 %}
+                        {% for keyword in keywords %}
+                            <tr class="list-item-block">
+                                <th scope="row">{{ counter }}</th>
+                                <td>{{ keyword.name }}</td>
+                                <td>{{ keyword.language }}</td>
+                                <td>{{ keyword.count }}</td>
+                                <td>
+                                    <a data-toggle="confirmation"
+                                       href="{{ path('keyword-edit', {keywordId: keyword.keywordId}) }}"
+                                       class="btn fancybox default edit btn-xs green"
+                                       title="Edit"><i class="material-icons">edit</i></a>
+                                    <a data-toggle="confirmation"
+                                       href="{{ path('keyword-delete', {keywordId: keyword.keywordId}) }}"
+                                       class="btn fancybox default delete btn-xs green"
+                                       title="Delete"><i class="material-icons">delete</i></a>
+                                </td>
+                            </tr>
+                            {% set counter = counter + 1 %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -63,8 +62,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-
-
             $('.delete').click(function (event) {
                 event.preventDefault();
                 if (confirm('Are you sure ?')) {
@@ -76,7 +73,7 @@
                         if (objData.status) {
                             targetElem.closest('.list-item-block').remove();
                             $('#success-msg').show();
-                        }else{
+                        } else {
                             $('#error-msg').show();
                         }
                     });

@@ -1,114 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Welcome To | News Keywords</title>
+    <!-- Favicon-->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet"
+          type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
-    <title>News Twitter</title>
+    <!-- Bootstrap Core Css -->
+    <link href="{{ asset("assets/plugins/bootstrap/css/bootstrap.css") }}" rel="stylesheet">
 
-    <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/css/bootstrap-theme.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/css/sb-admin.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/css/plugins/morris.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css">
+    <!-- Waves Effect Css -->
+    <link href="{{ asset("assets/plugins/node-waves/waves.css") }}" rel="stylesheet">
+
+    <!-- Animation Css -->
+    <link href="{{ asset("assets/plugins/animate-css/animate.css") }}" rel="stylesheet">
+
+    <!-- Custom Css -->
+    <link href="{{ asset("assets/css/style.css") }}" rel="stylesheet">
+
+    <link href="{{ asset("assets/plugins/bootstrap-select/css/bootstrap-select.css") }}" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{{ asset("assets/css/themes/all-themes.css") }}" rel="stylesheet">
     {% block stylesheets %}
     {% endblock %}
-
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 
-<body>
-
-<div id="wrapper">
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ path('keyword-list') }}">Dashboard</a>
+<body class="theme-red">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
         </div>
-        <!-- Top Menu Items -->
-        <ul class="nav navbar-right top-nav">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img id="profile-img" src="{{ app.user.image }}"> {{ app.user.username }} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="{{ path('security_logout') }}"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav side-nav">
+        <p>Please wait...</p>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+<!-- Top Bar -->
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse"
+               data-target="#navbar-collapse" aria-expanded="false"></a>
+            <a href="javascript:void(0);" class="bars"></a>
+            <a class="navbar-brand" href="{{ path('keyword-list') }}">NEWS KEYWORDS</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+        </div>
+    </div>
+</nav>
+<!-- #Top Bar -->
+<section>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <!-- User Info -->
+        <div class="user-info">
+            <div class="image">
+                <img src="{{ app.user.image }}" width="48" height="48" alt="User"/>
+            </div>
+            <div class="info-container">
+                <div class="name" data-toggle="dropdown" aria-haspopup="true"
+                     aria-expanded="false">{{ app.user.name }}</div>
+                <div class="email">{{ app.user.username }}</div>
+                <div class="btn-group user-helper-dropdown">
+                    <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="{{ path('security_logout') }}"><i class="material-icons">input</i>Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- #User Info -->
+        <!-- Menu -->
+        <div class="menu">
+            <ul class="list">
+                <li class="header">Menu</li>
                 <li class="active">
-                    <a href="{{ path('keyword-list') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    <a href="{{ path('keyword-list') }}">
+                        <i class="material-icons">home</i>
+                        <span>Home</span>
+                    </a>
                 </li>
                 <li>
-                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-file-text-o"></i> Keyword <i class="fa fa-fw fa-caret-down"></i></a>
-                    <ul id="demo" class="collapse">
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">trending_down</i>
+                        <span>Keyword</span>
+                    </a>
+                    <ul class="ml-menu">
                         <li>
-                            <a href="{{ path('keyword-add') }}">Add</a>
+                            <a href="{{ path('keyword-add') }}">
+                                <span>Add</span>
+                            </a>
                         </li>
                         <li>
-                            <a href="{{ path('keyword-table') }}">Table</a>
+                            <a href="{{ path('keyword-table') }}">
+                                <span>Table</span>
+                            </a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <!-- /.navbar-collapse -->
-    </nav>
-
-    <div id="page-wrapper">
-
-        <div class="container-fluid">
-
-            <!-- Page Heading -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">
-                        Dashboard <small>Statistics Overview</small>
-                    </h1>
-
-                </div>
+        <!-- #Menu -->
+        <!-- Footer -->
+        <div class="legal">
+            <div class="copyright">
+                &copy; {{ "now"|date('Y') }} <a href="{{ path('keyword-list') }}">News Keywords</a>
             </div>
-            <!-- /.row -->
-
-
-            {% block body %}{% endblock %}
+            <div class="version">
+                <b>Version: </b> 0.0.2
+            </div>
         </div>
-        <!-- /.container-fluid -->
+        <!-- #Footer -->
+    </aside>
+    <!-- #END# Left Sidebar -->
+    <!-- Right Sidebar -->
+    </aside>
+    <!-- #END# Right Sidebar -->
+</section>
 
-    </div>
-    <!-- /#page-wrapper -->
+<section class="content">
+    {% block body %}{% endblock %}
+</section>
 
-</div>
-<!-- /#wrapper -->
+<!-- Jquery Core Js -->
+<script src="{{ asset("assets/plugins/jquery/jquery.min.js") }}"></script>
 
-<script src="{{ asset('assets/js/jquery.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/bootstrap.js') }}" type="text/javascript"></script>
+<!-- Bootstrap Core Js -->
+<script src="{{ asset("assets/plugins/bootstrap/js/bootstrap.js") }}"></script>
+
+<!-- Select Plugin Js -->
+<script src="{{ asset("assets/plugins/bootstrap-select/js/bootstrap-select.js") }}"></script>
+
+<!-- Slimscroll Plugin Js -->
+<script src="{{ asset("assets/plugins/jquery-slimscroll/jquery.slimscroll.js") }}"></script>
+
+<!-- Waves Effect Plugin Js -->
+<script src="{{ asset("assets/plugins/node-waves/waves.js") }}"></script>
+
+<!-- Jquery CountTo Plugin Js -->
+<script src="{{ asset("assets/plugins/jquery-countto/jquery.countTo.js") }}"></script>
+
+<!-- Sparkline Chart Plugin Js -->
+<script src="{{ asset("assets/plugins/jquery-sparkline/jquery.sparkline.js") }}"></script>
+
+<!-- Custom Js -->
+<script src="{{ asset("assets/js/admin.js") }}"></script>
+
+<!-- Demo Js -->
+<script src="{{ asset("assets/js/demo.js") }}"></script>
 {% block javascripts %}
 {% endblock %}
-
-
 </body>
 
 </html>
