@@ -36,6 +36,7 @@
                                        title="Edit"><i class="material-icons">edit</i></a>
                                     <a data-toggle="confirmation"
                                        href="{{ path('keyword-delete', {keywordId: keyword.keywordId}) }}"
+                                       data-type="confirm"
                                        class="btn fancybox default delete btn-xs green"
                                        title="Delete"><i class="material-icons">delete</i></a>
                                 </td>
@@ -64,21 +65,28 @@
 
             $('.delete').click(function (event) {
                 event.preventDefault();
-                if (confirm('Are you sure ?')) {
-                    var targetElem = $(this);
+                var targetElem = $(this);
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this data!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
                     var targetHref = targetElem.attr('href');
-                    $.get(targetHref, function (data, status) {
+                    $.get(targetHref, function (data) {
                         var objData = JSON.parse(data);
-                        console.log(objData.status);
                         if (objData.status) {
                             targetElem.closest('.list-item-block').remove();
-                            $('#success-msg').show();
+                            swal("Deleted!", "Your data has been deleted.", "success");
                         } else {
-                            $('#error-msg').show();
+                            swal("Error!", "error", "warning");
                         }
                     });
-                }
-            });
+                });
+            })
         });
     </script>
 

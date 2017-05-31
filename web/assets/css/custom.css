@@ -14,6 +14,23 @@
     font-size: x-small;
 }
 
+.tweet-text {
+    margin-top: 6px;
+}
+
+.tweet-username {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    color: #edeff2;
+    font-weight: bold;
+    font-size: large;
+}
+
 #tweets .card .body{
     height: 130px;
+}
+
+.add-keyword-btn {
+    float: right;
 }

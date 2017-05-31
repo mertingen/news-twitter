@@ -17,6 +17,11 @@
                     <div class="header">
                         <h2>
                             Tweet Keywords
+                            <a href="{{ path('keyword-add') }}">
+                                <button class="btn btn-success waves-effect add-keyword-btn"
+                                        type="button">Add
+                                </button>
+                            </a>
                         </h2>
                     </div>
                     <div class="body">
@@ -39,9 +44,10 @@
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                     <div class="card">
                         <div class="body bg-cyan">
-                            {{ tweet.text }}
+                            <div class="tweet-text">{{ tweet.text }}</div>
                             <img class="tweet-profile-img" src="{{ tweet.user.profile_image_url }}">
-                            <span class="tweet-created-at">{{ tweet.created_at | date('Y-m-d H:i:s') }}</span>
+                            <span class="tweet-created-at">{{ tweet.created_at | date('d-m-Y H:i:s') }}</span>
+                            <span class="tweet-username">{{ tweet.user.name }}</span>
                         </div>
                     </div>
                 </div>
@@ -70,13 +76,13 @@
                             var date = new Date(tweet.created_at);
 
                             var yr = date.getFullYear(),
-                                month = date.getMonth() < 10 ? '0' + (parseInt(date.getMonth())+1) : (parseInt(date.getMonth())+1),
+                                month = date.getMonth() < 10 ? '0' + (parseInt(date.getMonth()) + 1) : (parseInt(date.getMonth()) + 1),
                                 day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate(),
                                 hour = date.getHours(),
                                 minute = date.getMinutes(),
                                 second = date.getSeconds(),
-                                newDate = yr + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second;
-                            $('#tweets').append('<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="card"><div class="body bg-cyan">' + tweet.text + '<img class="tweet-profile-img" src="' + tweet.user.profile_image_url + '"><span class="tweet-created-at">' + newDate + '</span></div></div></div>')
+                                newDate = day + '-' + month + '-' + yr + " " + hour + ":" + minute + ":" + second;
+                            $('#tweets').append('<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="card"><div class="body bg-cyan"><div class="tweet-text">' + tweet.text + '</div><img class="tweet-profile-img" src="' + tweet.user.profile_image_url + '"><span class="tweet-created-at">' + newDate + '</span><span class="tweet-username">' + tweet.user.name + '</span></div></div></div>')
                         });
                     }
                 });
