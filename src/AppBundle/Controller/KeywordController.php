@@ -138,7 +138,11 @@ class KeywordController extends Controller
         $count = $request->request->get('count');
 
         if (empty($name) || empty($language) || empty($count)) {
-            die('boş yerleri doldur.');
+            die('required fields.');
+        }
+
+        if (strlen($name) > 140) {
+            die('no more 140 char.');
         }
 
         $validKeyword = $this->getKeywordService()->getAll(array('name' => $name, 'user' => $this->getUser()));
@@ -194,7 +198,11 @@ class KeywordController extends Controller
         $count = $request->request->get('count');
 
         if (empty($name) || empty($language) || empty($count)) {
-            die('boş yerleri doldur.');
+            die('required fields.');
+        }
+
+        if (strlen($name) > 140) {
+            die('no more 140 char.');
         }
 
         $validWhere = array(

@@ -11,13 +11,14 @@
                     </h2>
                 </div>
                 <div class="body">
-                    <form action="{{ path('keyword-post-add') }}" method="POST">
+                    <form action="{{ path('keyword-post-add') }}" method="POST" id="add-form">
                         <div class="row clearfix">
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
                                         <input type="text" name="keyword" class="form-control" placeholder="Keyword"
                                                required/>
+                                        <div class="help-info">Max. 140 characters</div>
                                     </div>
                                 </div>
                             </div>
@@ -51,10 +52,38 @@
 
 {% endblock %}
 
-
-{% block extraJS %}
+{% block javascripts %}
+    <script src="{{ asset("assets/plugins/jquery-validation/jquery.validate.js") }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#add-form').validate({
+                rules: {
+                    keyword: {
+                        maxlength: 140,
+                        required: true
+                    },
+                    count: {
+                        required: true
+                    },
+                    language: {
+                        required: true
+                    }
+                },
+                highlight: function (input) {
+                    $(input).parents('.form-line').addClass('error');
+                },
+                unhighlight: function (input) {
+                    $(input).parents('.form-line').removeClass('error');
+                },
+                errorPlacement: function (error, element) {
+                    $(element).parents('.form-group').append(error);
+                }
+            });
+
+
+            {% if message.type == "success" %}
+            swal("Deleted!", "{{ message.msg }}", "success");
+            {% endif %}
         })
     </script>
 

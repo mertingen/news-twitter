@@ -3,8 +3,8 @@
     top: -15px;
     left: -18px;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
 }
 
 .tweet-created-at {
@@ -21,13 +21,19 @@
 .tweet-username {
     position: absolute;
     top: 0;
-    left: 25px;
+    left: 30px;
     color: #edeff2;
     font-weight: bold;
     font-size: large;
 }
 
-#tweets .card .body{
+.rigth-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#tweets .card .body {
     height: 130px;
 }
 
