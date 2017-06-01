@@ -61,4 +61,26 @@ class SessionService
         return true;
     }
 
+    /**
+     * @param $data
+     */
+    public function addMessage($data)
+    {
+        if (count($data) > 0) {
+            $this->session->getFlashBag()->add('message', $data['msg']);
+            $this->session->getFlashBag()->add('message', $data['type']);
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMessage()
+    {
+        $messageData = $this->session->getFlashBag()->get('message');
+        $message['msg'] = (!empty($messageData[0])) ? $messageData[0] : '';
+        $message['type'] = (!empty($messageData[1])) ? $messageData[1] : '';
+        return $message;
+    }
+
 }

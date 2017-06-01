@@ -87,6 +87,10 @@
                     }
                 });
             });
+
+            {% if message and message.type == 'error' %}
+                swal("Error!", "{{ message.msg }}", "warning");
+            {% endif %}
         });
     </script>
 

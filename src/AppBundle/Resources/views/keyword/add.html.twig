@@ -56,6 +56,11 @@
     <script src="{{ asset("assets/plugins/jquery-validation/jquery.validate.js") }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+
+            {% if message and message.type == 'error' %}
+                swal("Error!", "{{ message.msg }}", "warning");
+            {% endif %}
+
             $('#add-form').validate({
                 rules: {
                     keyword: {
@@ -80,10 +85,6 @@
                 }
             });
 
-
-            {% if message.type == "success" %}
-            swal("Deleted!", "{{ message.msg }}", "success");
-            {% endif %}
         })
     </script>
 

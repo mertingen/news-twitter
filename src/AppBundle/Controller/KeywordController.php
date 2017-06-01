@@ -76,10 +76,12 @@ class KeywordController extends Controller
 
         }
 
+        $message = $this->getSessionService()->getMessage();
         return $this->render('AppBundle:keyword:list.html.twig',
             array(
                 'userKeywords' => $userKeywords,
-                'tweetsData' => $data
+                'tweetsData' => $data,
+                'message' => $message
             )
         );
     }
@@ -123,7 +125,8 @@ class KeywordController extends Controller
      */
     public function addAction()
     {
-        return $this->render('AppBundle:keyword:add.html.twig');
+        $message = $this->getSessionService()->getMessage();
+        return $this->render('AppBundle:keyword:add.html.twig', array('message' => $message));
     }
 
     /**
@@ -138,16 +141,25 @@ class KeywordController extends Controller
         $count = $request->request->get('count');
 
         if (empty($name) || empty($language) || empty($count)) {
-            die('required fields.');
+            $data['msg'] = 'Please enter require fields.';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-add');
         }
 
         if (strlen($name) > 140) {
-            die('no more 140 char.');
+            $data['msg'] = 'Please enter no more 140 chars.';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-add');
         }
 
         $validKeyword = $this->getKeywordService()->getAll(array('name' => $name, 'user' => $this->getUser()));
         if ($validKeyword) {
-            die('aynı kelime girilemez, şimdilik...');
+            $data['msg'] = 'Please not enter same keywords.';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-add');
         }
 
         $keyword = new Keyword();
@@ -175,7 +187,10 @@ class KeywordController extends Controller
     public function editAction(Keyword $keyword)
     {
         if (empty($keyword)) {
-            die('keyword yok');
+            $data['msg'] = 'Keyword not found!';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-list');
         }
 
         return $this->render('AppBundle:keyword:edit.html.twig', array('keyword' => $keyword));
@@ -190,7 +205,10 @@ class KeywordController extends Controller
     public function postEditAction(Keyword $keyword, Request $request)
     {
         if (empty($keyword)) {
-            die('keyword yok');
+            $data['msg'] = 'Keyword not found!';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-list');
         }
 
         $name = $request->request->get('keyword');
@@ -198,11 +216,17 @@ class KeywordController extends Controller
         $count = $request->request->get('count');
 
         if (empty($name) || empty($language) || empty($count)) {
-            die('required fields.');
+            $data['msg'] = 'Please enter require fields.';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-edit', array('keywordId' => $keyword->getKeywordId()));
         }
 
         if (strlen($name) > 140) {
-            die('no more 140 char.');
+            $data['msg'] = 'Please enter no more 140 chars.';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-edit', array('keywordId' => $keyword->getKeywordId()));
         }
 
         $validWhere = array(
@@ -212,7 +236,10 @@ class KeywordController extends Controller
         );
         $validKeyword = $this->getKeywordService()->getExcluded($validWhere);
         if ($validKeyword) {
-            die('aynı kelime girilemez, şimdilik...');
+            $data['msg'] = 'Please not enter same keywords.';
+            $data['type'] = 'error';
+            $this->getSessionService()->addMessage($data);
+            return $this->redirectToRoute('keyword-edit', array('keywordId' => $keyword->getKeywordId()));
         }
 
         $keyword->setName($name);
