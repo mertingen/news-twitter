@@ -48,6 +48,13 @@
                             <img class="tweet-profile-img" src="{{ tweet.user.profile_image_url }}">
                             <span class="tweet-created-at">{{ tweet.created_at | date('d-m-Y H:i:s') }}</span>
                             <span class="tweet-username">{{ tweet.user.name }}</span>
+                            <a href="javascript:void(0);" class="dropdown-toggle tweet-setting" data-toggle="dropdown">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <ul class="dropdown-menu tweet-setting pull-right">
+                                <li><a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id_str }}"
+                                       target="_blank">Go to tweet</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -82,15 +89,16 @@
                                 minute = date.getMinutes(),
                                 second = date.getSeconds(),
                                 newDate = day + '-' + month + '-' + yr + " " + hour + ":" + minute + ":" + second;
-                            $('#tweets').append('<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="card"><div class="body bg-cyan"><div class="tweet-text">' + tweet.text + '</div><img class="tweet-profile-img" src="' + tweet.user.profile_image_url + '"><span class="tweet-created-at">' + newDate + '</span><span class="tweet-username">' + tweet.user.name + '</span></div></div></div>')
+                            $('#tweets').append('<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="card"><div class="body bg-cyan"><div class="tweet-text">' + tweet.text + '</div><img class="tweet-profile-img" src="' + tweet.user.profile_image_url + '"><span class="tweet-created-at">' + newDate + '</span><span class="tweet-username">' + tweet.user.name + '</span><a href="javascript:void(0);" class="dropdown-toggle tweet-setting" data-toggle="dropdown"><i class="material-icons">more_vert</i> </a> <ul class="dropdown-menu tweet-setting pull-right"> <li><a href="https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str + '"target="_blank">Go to tweet</a></li></ul></div></div></div>')
                         });
                     }
                 });
             });
 
             {% if message and message.type == 'error' %}
-                swal("Error!", "{{ message.msg }}", "warning");
+            swal("Error!", "{{ message.msg }}", "warning");
             {% endif %}
+
         });
     </script>
 

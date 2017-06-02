@@ -7,6 +7,12 @@
     height: 45px;
 }
 
+.tweet-setting {
+    position: absolute;
+    top: 5px;
+    right: 0;
+}
+
 .tweet-created-at {
     position: absolute;
     bottom: 0;
@@ -14,8 +20,13 @@
     font-size: x-small;
 }
 
+#top-navbar {
+    /*background-color: #0D47A1;*/
+}
+
 .tweet-text {
     margin-top: 6px;
+    text-overflow: clip !important;
 }
 
 .tweet-username {
@@ -34,7 +45,7 @@
 }
 
 #tweets .card .body {
-    height: 130px;
+    height: 175px;
 }
 
 .add-keyword-btn {
