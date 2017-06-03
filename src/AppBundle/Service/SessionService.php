@@ -69,6 +69,7 @@ class SessionService
         if (count($data) > 0) {
             $this->session->getFlashBag()->add('message', $data['msg']);
             $this->session->getFlashBag()->add('message', $data['type']);
+            $this->session->getFlashBag()->add('message', $data['title']);
         }
     }
 
@@ -80,6 +81,7 @@ class SessionService
         $messageData = $this->session->getFlashBag()->get('message');
         $message['msg'] = (!empty($messageData[0])) ? $messageData[0] : '';
         $message['type'] = (!empty($messageData[1])) ? $messageData[1] : '';
+        $message['title'] = (!empty($messageData[2])) ? $messageData[2] : '';
         return $message;
     }
 

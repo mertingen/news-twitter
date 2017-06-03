@@ -82,6 +82,10 @@
                     $(element).parents('.form-group').append(error);
                 }
             });
+
+            {% if message and message.msg %}
+                swal("{{ message.title }}", "{{ message.msg }}", "{{ message.type }}");
+            {% endif %}
         })
     </script>
 

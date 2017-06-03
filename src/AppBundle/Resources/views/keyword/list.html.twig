@@ -95,8 +95,8 @@
                 });
             });
 
-            {% if message and message.type == 'error' %}
-            swal("Error!", "{{ message.msg }}", "warning");
+            {% if message and message.msg %}
+                swal("{{ message.title }}", "{{ message.msg }}", "{{ message.type }}");
             {% endif %}
 
         });

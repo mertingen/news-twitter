@@ -74,6 +74,12 @@ class KeywordController extends Controller
                 $data = array();
             }
 
+        } else {
+            $notificationData['msg'] = 'You do not have a keyword, you can start from here.';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Info';
+            $this->getSessionService()->addMessage($notificationData);
+            return $this->redirectToRoute('keyword-add');
         }
 
         $message = $this->getSessionService()->getMessage();
@@ -141,24 +147,27 @@ class KeywordController extends Controller
         $count = $request->request->get('count');
 
         if (empty($name) || empty($language) || empty($count)) {
-            $data['msg'] = 'Please enter require fields.';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Please enter require fields.';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-add');
         }
 
         if (strlen($name) > 140) {
-            $data['msg'] = 'Please enter no more 140 chars.';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Please enter no more 140 chars.';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-add');
         }
 
         $validKeyword = $this->getKeywordService()->getAll(array('name' => $name, 'user' => $this->getUser()));
         if ($validKeyword) {
-            $data['msg'] = 'Please not enter same keywords.';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Please not enter same keywords.';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-add');
         }
 
@@ -171,10 +180,7 @@ class KeywordController extends Controller
         $user = $this->getUserService()->get($this->getUser());
         $keyword->setUser($user);
 
-        $keyword = $this->getKeywordService()->upsert($keyword);
-        if (!$keyword) {
-            die('hata!!!');
-        }
+        $this->getKeywordService()->upsert($keyword);
 
         return $this->redirectToRoute('keyword-list');
     }
@@ -187,13 +193,16 @@ class KeywordController extends Controller
     public function editAction(Keyword $keyword)
     {
         if (empty($keyword)) {
-            $data['msg'] = 'Keyword not found!';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Keyword not found!';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-list');
         }
 
-        return $this->render('AppBundle:keyword:edit.html.twig', array('keyword' => $keyword));
+        $message = $this->getSessionService()->getMessage();
+
+        return $this->render('AppBundle:keyword:edit.html.twig', array('keyword' => $keyword, 'message' => $message));
     }
 
     /**
@@ -205,9 +214,10 @@ class KeywordController extends Controller
     public function postEditAction(Keyword $keyword, Request $request)
     {
         if (empty($keyword)) {
-            $data['msg'] = 'Keyword not found!';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Keyword not found!';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-list');
         }
 
@@ -216,16 +226,18 @@ class KeywordController extends Controller
         $count = $request->request->get('count');
 
         if (empty($name) || empty($language) || empty($count)) {
-            $data['msg'] = 'Please enter require fields.';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Please enter require fields.';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-edit', array('keywordId' => $keyword->getKeywordId()));
         }
 
         if (strlen($name) > 140) {
-            $data['msg'] = 'Please enter no more 140 chars.';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Please enter no more 140 chars.';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-edit', array('keywordId' => $keyword->getKeywordId()));
         }
 
@@ -236,9 +248,9 @@ class KeywordController extends Controller
         );
         $validKeyword = $this->getKeywordService()->getExcluded($validWhere);
         if ($validKeyword) {
-            $data['msg'] = 'Please not enter same keywords.';
-            $data['type'] = 'error';
-            $this->getSessionService()->addMessage($data);
+            $notificationData['msg'] = 'Please not enter same keywords.';
+            $notificationData['type'] = 'warning';
+            $this->getSessionService()->addMessage($notificationData);
             return $this->redirectToRoute('keyword-edit', array('keywordId' => $keyword->getKeywordId()));
         }
 
