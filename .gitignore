@@ -3,6 +3,11 @@
 /composer.phar
 /vendor/
 /web/bundles/
+/var/cache/*
+/var/logs/*
+/var/sessions/*
+/var/bootstrap.php.cache
+/var/SymfonyRequirements.php
 !var/cache/.gitkeep
 !var/logs/.gitkeep
 !var/sessions/.gitkeep
