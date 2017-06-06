@@ -104,7 +104,11 @@ class KeywordController extends Controller
             return new JsonResponse(array(false), 404);
         }
 
-        $keyword = $this->getKeywordService()->get($keywordId);
+        $where = array(
+            'keywordId' => $keywordId,
+            'user' => $this->getUser()
+        );
+        $keyword = $this->getKeywordService()->get($where);
         $twitterConnection = $this->getSessionService()->get('twitterConnection');
         $tweetsData = $twitterConnection->get(
             'search/tweets',
