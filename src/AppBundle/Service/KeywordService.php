@@ -37,18 +37,14 @@ class KeywordService
     }
 
     /**
-     * @param $keywordId
+     * @param $where
      * @return bool|null|object
+     * @internal param $keywordId
      */
-    public function get($keywordId)
+    public function get($where)
     {
-        if (empty($keywordId)) {
-            return false;
-        }
-
         $keywordRepo = $this->entityManager->getRepository('AppBundle:Keyword');
-        return $keywordRepo->findOneBy(array('keywordId' => $keywordId));
-
+        return $keywordRepo->findOneBy(array('keywordId' => $where['keywordId'], 'user' => $where['user']));
     }
 
     /**

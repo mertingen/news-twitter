@@ -186,12 +186,27 @@ class KeywordController extends Controller
     }
 
     /**
-     * @param Keyword $keyword
+     * @param $keywordId
      * @return Response
+     * @internal param Keyword $keyword
      * @Route("/edit/{keywordId}", methods={"GET"}, name="keyword-edit")
      */
-    public function editAction(Keyword $keyword)
+    public function editAction($keywordId)
     {
+        if (empty($keywordId)) {
+            $notificationData['msg'] = 'Keyword Id not found!';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
+            return $this->redirectToRoute('keyword-list');
+        }
+
+        $where = array(
+            'keywordId' => $keywordId,
+            'user' => $this->getUser()
+        );
+        $keyword = $this->getKeywordService()->get($where);
+
         if (empty($keyword)) {
             $notificationData['msg'] = 'Keyword not found!';
             $notificationData['type'] = 'warning';
@@ -206,13 +221,28 @@ class KeywordController extends Controller
     }
 
     /**
-     * @param Keyword $keyword
+     * @param $keywordId
      * @param Request $request
      * @return Response
+     * @internal param Keyword $keyword
      * @Route("/postEdit/{keywordId}", methods={"POST"}, name="keyword-post-edit")
      */
-    public function postEditAction(Keyword $keyword, Request $request)
+    public function postEditAction($keywordId, Request $request)
     {
+        if (empty($keywordId)) {
+            $notificationData['msg'] = 'Keyword Id not found!';
+            $notificationData['type'] = 'warning';
+            $notificationData['title'] = 'Error!';
+            $this->getSessionService()->addMessage($notificationData);
+            return $this->redirectToRoute('keyword-list');
+        }
+
+        $where = array(
+            'keywordId' => $keywordId,
+            'user' => $this->getUser()
+        );
+        $keyword = $this->getKeywordService()->get($where);
+
         if (empty($keyword)) {
             $notificationData['msg'] = 'Keyword not found!';
             $notificationData['type'] = 'warning';
@@ -283,14 +313,25 @@ class KeywordController extends Controller
     }
 
     /**
-     * @param Keyword $keyword
+     * @param $keywordId
      * @return Response
+     * @internal param Keyword $keyword
      * @Route("/delete/{keywordId}", methods={"GET"}, name="keyword-delete")
      */
-    public function deleteAction(Keyword $keyword)
+    public function deleteAction($keywordId)
     {
+        if (empty($keywordId)) {
+            return new Response(json_encode("Keyword Id Not Found!"), 404);
+        }
+
+        $where = array(
+            'keywordId' => $keywordId,
+            'user' => $this->getUser()
+        );
+        $keyword = $this->getKeywordService()->get($where);
+
         if (empty($keyword)) {
-            return new Response(json_encode("Placement Not Found!"), 404);
+            return new Response(json_encode("Keyword Not Found!"), 404);
         }
 
         $isDeleted = $this->getKeywordService()->delete($keyword);

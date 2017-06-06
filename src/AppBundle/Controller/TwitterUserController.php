@@ -82,14 +82,13 @@ class TwitterUserController extends Controller
 
             $connection = new TwitterOAuth($consumerKey, $consumerKeySecret, $accessData['oauth_token'], $accessData['oauth_token_secret']);
 
-            $this->getSessionService()->set('twitterConnection', $connection);
-
             $twitterUser = $connection->get("account/verify_credentials");
         } catch (TwitterOAuthException $e) {
             dump($e->getMessage());
             die;
         }
 
+        $this->getSessionService()->set('twitterConnection', $connection);
         $this->getSessionService()->set('twitterUser', $twitterUser);
         return $this->redirectToRoute('check-user');
 
