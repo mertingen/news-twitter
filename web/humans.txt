@@ -1,0 +1,9 @@
+/* TEAM */
+Site: mertblog.net
+Twitter: _mertsimsek
+
+
+/* THANKS */
+Name: Omar Kurt
+Twitter: omarkurt
+Reason: Security Bug
