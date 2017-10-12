@@ -16,8 +16,8 @@ parameters:
     mailer_password: ~
 
     callback_url: http://localhost:5050/checkLoginTwitter
-    consumer_key: GR7gUwTSc21nrj2GjO1aRwkxW
-    consumer_secret_key: v3UIX6bBHXc8siHMtzW22bbCesO7LlfAAwGOLxVYUG0PrCLW0J
+    consumer_key:
+    consumer_secret_key:
     api_host: http://localhost:3000/v1
 
     #Redis parameters
